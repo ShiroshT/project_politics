@@ -11,6 +11,9 @@ class Candidate(models.Model):
 	description = models.TextField(max_length=2000)
 	# candidate_pic = models.ImageField(upload_to=None, default=None)
 
+	def __str__(self):
+		return self.name_candidate
+
 
 class CandidateAchivement(models.Model):
 	id_candidate_achivement = models.ForeignKey(Candidate, related_name = 'achivement')
@@ -32,3 +35,4 @@ class Reviews(models.Model):
 	header = models.CharField(max_length=500, unique=True)
 	review = models.CharField(max_length=500, unique=True)
 	date_of_review = models.DateTimeField(auto_now_add = True)
+	
