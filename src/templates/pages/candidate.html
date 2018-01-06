@@ -56,22 +56,11 @@
     <main role="main" class="container">
 
       <div class="starter-template">
-        <h1>Bootstrap starter template</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+        <h1>CANDIDATE</h1>
+        <!-- <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p> -->
       </div>
 
-      <!-- {{ boldmessage }} -->  
-      {% if candidates %}
 
-        <ul>
-
-          {% for boards in candidates %}
-            <li><a href="/pages/candidate/{{ boards.slug }}">{{ boards.id_candidate }}</a></li>
-          {% endfor %}
-
-         </ul>
-
-      {% endif %}
 
     </main><!-- /.container -->
 

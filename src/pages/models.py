@@ -2,14 +2,20 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
 class Candidate(models.Model): 
 	id_candidate = models.CharField(max_length=32, unique=True)
 	name_candidate = models.CharField(max_length=60, unique=False)
 	summary = models.TextField(max_length=500)
-	description = models.TextField(max_length=2000)
+	descriptions = models.TextField(max_length=2000)
+	slug = models.SlugField(unique=True)
 	# candidate_pic = models.ImageField(upload_to=None, default=None)
+
+	def save(self, *args, **kwargs):
+		self.slug = slugify(self.name_candidate)
+		super(Candidate, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return self.name_candidate
@@ -35,4 +41,6 @@ class Reviews(models.Model):
 	header = models.CharField(max_length=500, unique=True)
 	review = models.CharField(max_length=500, unique=True)
 	date_of_review = models.DateTimeField(auto_now_add = True)
-	
+
+
+
