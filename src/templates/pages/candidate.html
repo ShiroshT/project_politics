@@ -60,7 +60,12 @@
         <!-- <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p> -->
       </div>
 
-
+       {% if candidate %}
+        <h1>{{ candidate_name }}</h1>
+            <h2>tesdt</h2>
+        {% else %}
+            The specified category {{ category_name }} does not exist!
+        {% endif %}
 
     </main><!-- /.container -->
 

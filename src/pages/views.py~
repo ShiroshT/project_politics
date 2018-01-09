@@ -19,23 +19,24 @@ def home(request):
 
 
 def candidate(request, candidate_name_slug):
+
         # print 'slug name', candidate_slug_nam
-        context_dict = {}
-	# context_dict = {}
-	category_list = Candidate.objects.all()
-	context_dict = {'candidates': category_list }
 
-	print category_list
 
-	# try:
-	# 	candidate = Candidate.objects.all()
-	# 	print 'candidate', candidate.name_candidate
+     context_dict = {}
+	
+	# category_list = Candidate.objects.all()
+	# context_dict = {'candidates': category_list }
 
-	# 	context_dict = {'candidates': candidate  }
-	# 	# context_dict['candidate_name'] = candidate.name_candidate
+	# print category_list
+
+	try:
+		candidate = Candidate.objects.get(slug=candidate_name_slug)
+		context_dict['candidate_name'] = candidate.name_candidate
 		
-	# except Candidate.DoesNotExist:
+	except Candidate.DoesNotExist:
 		
-	# 	pass
+		pass
 
 	return render(request, 'pages/candidate.html', context_dict)
+

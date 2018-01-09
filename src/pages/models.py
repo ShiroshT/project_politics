@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+from django.conf import settings
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
 class Candidate(models.Model): 
 	id_candidate = models.CharField(max_length=32, unique=True)
+	userId = models.ForeignKey(settings.AUTH_USER_MODEL)
 	name_candidate = models.CharField(max_length=60, unique=False)
 	summary = models.TextField(max_length=500)
 	descriptions = models.TextField(max_length=2000)
@@ -36,7 +37,7 @@ class CandidateScore(models.Model):
 
 
 class Reviews(models.Model):
-	userId = models.ForeignKey(User, related_name = 'reviewer')
+	userId = models.ForeignKey(settings.AUTH_USER_MODEL)
 	id_candidate_reivew = models.ForeignKey(Candidate, related_name = 'reviews')
 	header = models.CharField(max_length=500, unique=True)
 	review = models.CharField(max_length=500, unique=True)

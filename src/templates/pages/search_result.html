@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+{% if candidateResult %}
+
+    {% for result in results %}
+        <li>{{ candidate_name }}</li>
+    {% endfor %}
+
+{% else %}
+    The specified category {{ category_name }} does not exist!
+{% endif %}
+
+
+
+
+
+{% endblock content %}

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+  
+  {% block content %}
+
+   <div class="jumbotron">
+      <div class="container">
+        <h2 class="display-6 text-center">Search, review, and approve your local representative </h2>
+        <div class="input-group col-md-12">
+          <!-- <form class="search-form" method="get" action="{% url 'results' %}" > -->
+              <!-- <input type="text" class="search-query form-control" name ="search_text" id = "search" placeholder="Search" />
+              <span class="input-group-btn form-inline">
+              <button type="button" class="btn btn-primary btn-lg">Large button</button>
+              <span class=" glyphicon glyphicon-search"></span> -->
+                <!-- <button type="button" class="btn btn-primary btn-lg">Large button</button> -->
+         <!-- </form> -->
+
+         <form method="get" action="{% url 'results' %}" class="navbar-form pull-right">
+            <!-- <input type="text" id="searchBox" class="input-medium search-query" name="q" placeholder="Search"> -->
+            <input type="text" class="search-query" name ="search_text" id = "search" placeholder="Search" />
+            <input type="submit" class="btn" value="Search" >
+          </form>
+        </span>
+        </div>
+      </div>
+    </div>
+
+
+
+      <div class="album text-muted">
+          <h2 class="display-6 text-center">How popular is your representative? </h2>
+
+          <div class="container">
+              <h5 class="mx-auto display-6 ">Bigest loosers </h5>
+            <div class="row">
+              <div class="card">
+                <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              </div>
+              <div class="card">
+                <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              </div>
+              <div class="card">
+                <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              </div> 
+          </div>
+        </div>
+
+
+        <div class="album text-muted">
+            <div class="container">
+                <h5 class="mx-auto display-6 ">Bigest loosers </h5>
+              <div class="row">
+                <div class="card">
+                  <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <div class="card">
+                  <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+                <div class="card">
+                  <img data-src="holder.js/100px280?theme=thumb" alt="Card image cap">
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+              </div>
+    
+            </div>
+          </div>
+                
+          <canvas id="lineChart"></canvas>
+
+    {% endblock %}
