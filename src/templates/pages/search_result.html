@@ -1,18 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<!-- this is coming from the view  object_list is being passed from Context in search_results view-->
 
-{% if candidateResult %}
+{% for obj in object_list %}
+   <h1>{{ obj.name_candidate }} </h1> 
+   <h1>{{ obj.summary }} </h1> 
 
-    {% for result in results %}
-        <li>{{ candidate_name }}</li>
-    {% endfor %}
-
-{% else %}
-    The specified category {{ category_name }} does not exist!
-{% endif %}
-
-
+{% endfor %}
 
 
 

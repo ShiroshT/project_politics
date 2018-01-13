@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.conf import settings
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
@@ -14,12 +15,20 @@ class Candidate(models.Model):
 	slug = models.SlugField(unique=True)
 	# candidate_pic = models.ImageField(upload_to=None, default=None)
 
-	def save(self, *args, **kwargs):
-		self.slug = slugify(self.name_candidate)
-		super(Candidate, self).save(*args, **kwargs)
 
 	def __str__(self):
 		return self.name_candidate
+
+# This is a validation for the field - if a specific validation is needed its lecture 19
+        # def clean(self, *args, **kwrgs): 
+        #      name_candidate = self.name_candidate
+        #      if name_candidate == "abc":
+        #          raise forms.ValidationError("Cannot be testfield ")
+        #      return super(Candidate, self).clean(*args, **kwrgs)
+
+	def save(self, *args, **kwargs):
+            self.slug = slugify(self.name_candidate)
+	    super(Candidate, self).save(*args, **kwargs)		
 
 
 class CandidateAchivement(models.Model):

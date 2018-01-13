@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from django import forms
 from django.shortcuts import render
 from django.forms.utils import ErrorList
-from django.urls import reverse_lazy
 # to force the user to loggin - https://docs.djangoproject.com/en/2.0/topics/auth/default/
 from django.contrib.auth.mixins import LoginRequiredMixin  
 
@@ -11,7 +10,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template import Context
 
 from django.views.generic import (
-    DeleteView,
     DetailView, 
     ListView, 
     CreateView, 
@@ -20,24 +18,13 @@ from django.views.generic import (
 )
 
 from .forms import CandidateModelForm
-from .mixins import FormUserNeededMixin, UserOwnerMixin
+from .mixins import FormUserNeededMixin
 from .models import (
     Candidate,
     CandidateAchivement,
     CandidateScore, 
     Reviews
     )
-
-
-# -------------------------------------------------------------
-#   Note 1- Mixins - 
-#   Mejority of the LoginRequiredMixin is sufficnet and you dont need other mixins 
-#   but if there was a need for users to access form but they dont have to loggin 
-#   then we can Mixins. 
-
-# -------------------------------------------------------------
-
-
 
 # -------------------------------------------------------------
 # this is the Create View
@@ -46,7 +33,7 @@ from .models import (
 # Login required is used to make sure that before the form is submitted user is loggied. 
 
 # -------------------------------------------------------------
-# Adding an entry to the Candidate model - index  - CREATE
+# Adding an entry to the Candidate model - index 
 # -------------------------------------------------------------
 class CandidateCreateView(LoginRequiredMixin, FormUserNeededMixin, CreateView):
     # queryset = Candidate.objects.all()
@@ -57,15 +44,18 @@ class CandidateCreateView(LoginRequiredMixin, FormUserNeededMixin, CreateView):
     # redirect_field_name = 'redirect_to'
 
 
-
 # -------------------------------------------------------------
-# this is the home page - index - READ 
+# this is the home page - index 
 # -------------------------------------------------------------
 class CandidateListView(ListView):
     template_name = 'pages/home.html'
     queryset = Candidate.objects.all()
 
 
+
+# -------------------------------------------------------------
+# this is the  Detail view - Page for Candidate
+# -------------------------------------------------------------
 class CandidateDetailView(DetailView):
     queryset = Candidate.objects.all()
 
@@ -75,26 +65,13 @@ class CandidateDetailView(DetailView):
 
 
 # -------------------------------------------------------------
-# this is the Update view - Page for Candidate - UPDATE
+# this is the Update view - Page for Candidate
 # -------------------------------------------------------------
-class CandidateUpdateView(LoginRequiredMixin, UserOwnerMixin, UpdateView):
+class CandidateUpdateView(UpdateView):
     queryset = Candidate.objects.all()
     form_class = CandidateModelForm
     success_url = '/pages/'
     template_name = 'pages/update_candidate.html'
-
-
-
-
-# -------------------------------------------------------------
-# this is the  Detail view - Page for Candidate - DELETE
-# -------------------------------------------------------------
-
-class CandidateDeleteView(DeleteView):
-    model = Candidate
-    template_name = 'pages/delete_candidate.html'
-    success_url = reverse_lazy("home")
-
 
 
 

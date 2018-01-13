@@ -1,17 +1,32 @@
 from django import forms
+
 from .models import Candidate
 
-class CandidateForm(forms.ModelForm):
-    id_candidate = forms.CharField(help_text="Please enter the category name.")
-    name_candidate = forms.CharField(help_text="Please enter the category name.")
-    summary = forms.CharField(widget=forms.Textarea())
-    descriptions = forms.CharField(widget=forms.Textarea())
+class CandidateModelForm(forms.ModelForm):
+    # id_candidate = forms.CharField(help_text="Please enter the category name.")
+    # name_candidate = forms.CharField(help_text="Please enter the category name.")
+    # summary = forms.CharField(widget=forms.Textarea())
+    # descriptions = forms.CharField(widget=forms.Textarea())
 
     # An inline class to provide additional information on the form.
     class Meta:
         # Provide an association between the ModelForm and a model
         model = Candidate
-        fields = ('name_candidate',)
+        fields = (
+            # 'userId', 
+            'id_candidate',  
+            'name_candidate', 
+            'summary', 
+            'descriptions')
+
+
+# this is a type of validation added for the form 
+    # def clean_name_candidate(self, *args, **kwrgs): 
+    #     name_candidate = self.cleaned_data.get("name_candidate")
+    #     if name_candidate == "abc":
+    #         raise forms.ValidationError("Cannot be testfield ")
+    #     return name_candidate
+
 
 
 
