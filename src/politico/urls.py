@@ -26,7 +26,7 @@ from pages import  views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^pages/', include('pages.urls', namespace='candidate')),
-    url(r'^$', home, name = 'home'),
+    url(r'^$', views.CandidateListView.as_view(), name = 'home'),
 
 
 ]
