@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.conf import settings
+from django.urls import reverse
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import slugify
@@ -18,6 +19,13 @@ class Candidate(models.Model):
 
 	def __str__(self):
 		return self.name_candidate
+	
+	def get_absolute_url(self):
+		return reverse("candidate:detailcandidate", kwargs={"pk":self.pk})
+
+	def save(self, *args, **kwargs):
+            self.slug = slugify(self.name_candidate)
+	    super(Candidate, self).save(*args, **kwargs)		
 
 # This is a validation for the field - if a specific validation is needed its lecture 19
         # def clean(self, *args, **kwrgs): 
@@ -26,9 +34,6 @@ class Candidate(models.Model):
         #          raise forms.ValidationError("Cannot be testfield ")
         #      return super(Candidate, self).clean(*args, **kwrgs)
 
-	def save(self, *args, **kwargs):
-            self.slug = slugify(self.name_candidate)
-	    super(Candidate, self).save(*args, **kwargs)		
 
 
 class CandidateAchivement(models.Model):

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class='row'>
+      <div class='col-sm-8 col-sm-offset-2'>
+          {% include "pages/search_form.html" %} <br/>
+          {% for object in object_list %}
+              <div class="media">
+                  {% if object.image %}
+                      <img class="d-flex align-self-start mr-3" src="..." alt="Generic placeholder image">
+                  {% endif %}
+                  <div class="media-body">
+                    <h5 class="mt-0">{{ object.name_candidate }}</h5> 
+                    <p> Added by :{{ object.userId }}  </p> <a href= '{{ object.get_absolute_url }}'>View</a>
+                    <p>{{object.summary }} </p>
+                  </div>
+              </div>
+              <hr/>
+          {% empty %}
+          {% if request.GET.q %}
+            <p> No Candidate found </p>
+          {% else %}
+            <p> No Candidate yet </p>
+          {% endif %}  
+          {% endfor %}
+    </div>
+  </div>
+{% endblock content %}
+
+
+

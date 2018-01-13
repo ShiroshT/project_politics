@@ -13,11 +13,11 @@ from .views import (
 
 
 urlpatterns = [
-     url(r'^$', CandidateListView.as_view(), name='home'), 
+     url(r'^$', CandidateListView.as_view(), name='candidatelist'), 
      url(r'^create/$', CandidateCreateView.as_view(), name='createcandiate'), 
      url(r'^(?P<pk>\d+)/edit/$', CandidateUpdateView.as_view(), name='updatecandaite'), 
      url(r'^(?P<pk>\d+)/delete/$', CandidateDeleteView.as_view(), name='deletecandaite'), 
-     url(r'^(?P<pk>\d+)/$', CandidateDetailView.as_view(), name='candidate'), 
+     url(r'^(?P<pk>\d+)/$', CandidateDetailView.as_view(), name='detailcandidate'), 
 #     # url(r'^$', RedirectView.as_view(url="/")), 
 #     # url(r'^$', RedirectView.as_view(url="/")), 
 #     url(r'^$', views.home, name='home'), # /api/tweet/s

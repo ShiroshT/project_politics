@@ -1,16 +1,35 @@
 {% extends 'base.html' %}
+
+{%block title %} Vote now {%endblock title%}
+
+{% block content %}
+
+<h1> hello</h1>
+
+{% endblock %}
+
+<!-- {% include "pages/search_form.html" %} <br/>
   
-  {% block content %}
+  
 
+{% for object in object_list %}
+  <h1>{{ object.name_candidate }} </h1> 
+<!-- <h1>{{ obj.summary }} </h1>  -->
 
-
-
-
-{% for obj in object_list %}
-<h1>{{ obj.name_candidate }} </h1> 
-<h1>{{ obj.summary }} </h1> 
-
+<!-- {% empty %}
+  {% if request.GET.q %}
+    <p> No tweets found </p>
+  {% else %}
+    <p> No tweets yet </p>
+  {% endif %}  
 {% endfor %}
+ --> -->
+
+
+
+
+
+
 
 
                 <!-- {{ boldmessage }}  
@@ -72,4 +91,4 @@
                 
           <canvas id="lineChart"></canvas> -->
 
-    {% endblock %}
+  

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django import forms
+from django.db.models import Q
 from django.shortcuts import render
 from django.forms.utils import ErrorList
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 # to force the user to loggin - https://docs.djangoproject.com/en/2.0/topics/auth/default/
 from django.contrib.auth.mixins import LoginRequiredMixin  
 
@@ -34,16 +35,27 @@ from .models import (
 #   Mejority of the LoginRequiredMixin is sufficnet and you dont need other mixins 
 #   but if there was a need for users to access form but they dont have to loggin 
 #   then we can Mixins. 
+#  Note 2 -  Reverse search  -
+#  Note 3 - Django Q look ups - https://docs.djangoproject.com/en/2.0/topics/db/queries/
+#  Note 4 - LoginRequiredMixin -  Login required is used to make sure that before the form is submitted user is loggied. 
 
 # -------------------------------------------------------------
 
 
-
 # -------------------------------------------------------------
-# this is the Create View
+# HTMLs being used - 
+#  - add_candidate.html
+#  - candidate_list.html (auto) -> home page
+#  - candiate_details.html
+#  - update_candidate.html
+#  - 
 # -------------------------------------------------------------
 
-# Login required is used to make sure that before the form is submitted user is loggied. 
+
+
+# START
+
+# CRUD 
 
 # -------------------------------------------------------------
 # Adding an entry to the Candidate model - index  - CREATE
@@ -52,38 +64,54 @@ class CandidateCreateView(LoginRequiredMixin, FormUserNeededMixin, CreateView):
     # queryset = Candidate.objects.all()
     form_class = CandidateModelForm
     template_name = 'pages/add_candidate.html'
-    success_url = '/pages/'
+    # success_url = '/pages/'
     login_url = '/admin/'
     # redirect_field_name = 'redirect_to'
 
 
 
 # -------------------------------------------------------------
-# this is the home page - index - READ 
+# this is the home page - index - READ - LIST 
 # -------------------------------------------------------------
 class CandidateListView(ListView):
-    template_name = 'pages/home.html'
-    queryset = Candidate.objects.all()
+    # template_name = 'pages/home.html'
+    # queryset = Candidate.objects.all()
+
+    def get_queryset(self, *args, **kwargs):
+        qs = Candidate.objects.all()
+        query = self.request.GET.get("q", None)
+        if query is not None:
+            query = query.strip()
+            qs = qs.filter(
+                Q(name_candidate__icontains=query) |
+                Q(userId__username__icontains=query) |
+                Q(summary__icontains=query)|
+                Q(descriptions__icontains=query)
+            )
+        return qs 
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(CandidateListView, self).get_context_data(*args, **kwargs)
+        return context
 
 
+# -------------------------------------------------------------
+# this is the home page - index - READ - DETAILS
+# -------------------------------------------------------------
 class CandidateDetailView(DetailView):
     queryset = Candidate.objects.all()
 
     def get_objects(self):
         return Candidate.objects.get(id =1)
 
-
-
 # -------------------------------------------------------------
 # this is the Update view - Page for Candidate - UPDATE
 # -------------------------------------------------------------
-class CandidateUpdateView(LoginRequiredMixin, UserOwnerMixin, UpdateView):
+class CandidateUpdateView(LoginRequiredMixin, UpdateView):
     queryset = Candidate.objects.all()
     form_class = CandidateModelForm
     success_url = '/pages/'
     template_name = 'pages/update_candidate.html'
-
-
 
 
 # -------------------------------------------------------------
@@ -93,10 +121,7 @@ class CandidateUpdateView(LoginRequiredMixin, UserOwnerMixin, UpdateView):
 class CandidateDeleteView(DeleteView):
     model = Candidate
     template_name = 'pages/delete_candidate.html'
-    success_url = reverse_lazy("home")
-
-
-
+    success_url = reverse_lazy("candidate:candidatelist")  #/this being directed to the home page you can use reverse or reverse_lazy
 
 # -------------------------------------------------------------
 # this is the home page - index 
