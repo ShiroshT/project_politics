@@ -28,8 +28,6 @@ from .models import (
     CandidateScore, 
     Reviews
     )
-
-
 # -------------------------------------------------------------
 #   Note 1- Mixins - 
 #   Mejority of the LoginRequiredMixin is sufficnet and you dont need other mixins 
@@ -41,7 +39,6 @@ from .models import (
 
 # -------------------------------------------------------------
 
-
 # -------------------------------------------------------------
 # HTMLs being used - 
 #  - add_candidate.html
@@ -51,10 +48,7 @@ from .models import (
 #  - 
 # -------------------------------------------------------------
 
-
-
 # START
-
 # CRUD 
 
 # -------------------------------------------------------------
@@ -65,7 +59,7 @@ class CandidateCreateView(LoginRequiredMixin, FormUserNeededMixin, CreateView):
     form_class = CandidateModelForm
     template_name = 'pages/add_candidate.html'
     # success_url = '/pages/'
-    login_url = '/admin/'
+    # login_url = '/admin/'
     # redirect_field_name = 'redirect_to'
 
 
@@ -90,8 +84,14 @@ class CandidateListView(ListView):
             )
         return qs 
 
+    # def get_context_data(self, *args, **kwargs):
+    #     context = super(CandidateListView, self).get_context_data(*args, **kwargs)
+    #     return context
+
     def get_context_data(self, *args, **kwargs):
         context = super(CandidateListView, self).get_context_data(*args, **kwargs)
+        context['create_form'] = CandidateModelForm()
+        context['create_url'] = reverse_lazy("candidate:createcandiate")
         return context
 
 
@@ -122,6 +122,10 @@ class CandidateDeleteView(DeleteView):
     model = Candidate
     template_name = 'pages/delete_candidate.html'
     success_url = reverse_lazy("candidate:candidatelist")  #/this being directed to the home page you can use reverse or reverse_lazy
+
+
+
+
 
 # -------------------------------------------------------------
 # this is the home page - index 

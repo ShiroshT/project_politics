@@ -1,30 +1,153 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block script %}
+<script>
+
+
+</script>
+
+{% endblock script %}
+
 
 {% block content %}
+   
     <div class='row'>
-      <div class='col-sm-8 col-sm-offset-2'>
-          {% for object in object_list %}
-              <div class="media">
-                  {% if object.image %}
-                      <img class="d-flex align-self-start mr-3" src="..." alt="Generic placeholder image">
-                  {% endif %}
-                  <div class="media-body">
-                    <h5 class="mt-0">{{ object.name_candidate }}</h5> 
-                    <p> Added by :{{ object.userId }}  </p> <a href= '{{ object.get_absolute_url }}'>View</a>
-                    <p>{{object.summary }} </p>
+        <div class='col-sm-3 col-xs-12' style='background-color:red;'>
+        <h1>{{ request.user }}</h1>
+        </div>
+        <div class='col-sm-9 '>
+             {% if not request.GET.q %}
+                <div class=''>
+                    
+                    {% include "pages/form.html" with form=create_form action_url=create_url btn_title='Add Candidate' %}
+
+                </div>
+                <hr/>
+            {% endif %}
+        {% for object in object_list %}
+            <div class="media">
+                  <div class="media-left">
+                    <a href="#">
+                      {% if object.image %}
+                        <img class="media-object" src="..." alt="...">
+                     {% endif %}
+                    </a>
                   </div>
-              </div>
-              <hr/>
-          {% empty %}
-          {% if request.GET.q %}
-            <p> No Candidate found </p>
-          {% else %}
-            <p> No Candidate yet </p>
-          {% endif %}  
-          {% endfor %}
+                  <div class="media-body">
+                    {{ object.name_candidate }}<br/>
+                    {{ object.id_content }}<br/>
+                    {{ object.summary }}<br/>
+                    via {{ object.userId }}  | <a href='{{ object.get_absolute_url }}'>View</a>
+                  </div>
+            </div>
+            <hr/>
+        {% empty %}
+            {% if request.GET.q %}
+             <p>No tweets found.</p>
+            {% else %}
+            <p>No tweets yet.</p>
+            {% endif %}
+        {% endfor %}
+
+        </div>
     </div>
-  </div>
+
 {% endblock content %}
 
 
 
+
+
+
+<style>
+        #candidate-container {
+        }
+ </style>
+        
+{% block script %}
+<script>
+   function getParameterByName(name, url) {
+      if (!url) {
+         url = window.location.href;
+            }
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+     }
+    
+    $(document).ready(function(){
+    console.log("working");
+    var query = getParameterByName('q')
+    var CandiateList = [];
+          
+    function parseCandidates()
+    {
+        if (candidateList == 0) 
+        {
+              $("#candidate-container").text("No Candidates currently found.")
+        } 
+        else 
+        {
+           // Candidates exist, parse & display them
+            $.each(candidateList, function(key, value)
+            {
+                  var candidateKey = key;
+                  var candidateContent = value.content;
+                  var candidateUser = value.user;
+                  $("#tweet-container").append(
+                      "<div class=\"media\"><div class=\"media-body\">" + tweetContent + "<br/> via " + tweetUser.username + " | " + "<a href='#'>View</a>" + "</div></div><hr/>"
+                  )
+            })
+        }
+    }
+
+    $.ajax({
+            url: "/api/candidates/",
+            data: {
+              "q": query
+            },
+            method: "GET",
+            success: function(data){
+              // console.log(data)
+              candidateList = data
+              parseCandidates()
+             
+            },
+            error: function(data){
+              console.log("error")
+              console.log(data)
+            }
+          })
+    });
+        </script>
+    {% endblock script %}
+        
+        
+        
+     {% block content %}
+              <div class='row'>
+                <div class='col-sm-3 col-xs-12' style='background-color:red;'>
+                <h1>{{ request.user }}</h1>
+                </div>
+                <div class='col-sm-9 '>
+                     {% if not request.GET.q %}
+                        <div class=''>
+                            
+                            {% include "tweets/form.html" with form=create_form action_url=create_url btn_title='Tweet' %}
+        
+                        </div>
+                        <hr/>
+                    {% endif %}
+        
+                  <div id='tweet-container'>
+        
+        
+                  </div>
+        
+        
+                </div>
+            </div>
+    {% endblock content %}

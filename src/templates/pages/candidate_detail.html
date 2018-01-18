@@ -2,9 +2,18 @@
 
 {% block content %}
 
+<div class='row'>
+    <div class='col-sm-3 col-xs-12'>
+        <h1> {{ object.id_candidate }} <br></h1>
 
-{{ object.id_candidate }} <br>
-{{ object.summary }} <br>
-{{ object.descriptions }}
+    </div>
+    <div class='col-sm-9 col-xs-12'>
+            <p>{{ object.summary }} </p>
+            <p>{{ object.descriptions }} </p><br>
+            
+    </div>
+
+
+</div>
 
 {% endblock content %}

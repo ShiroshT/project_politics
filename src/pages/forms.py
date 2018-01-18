@@ -9,6 +9,32 @@ class CandidateModelForm(forms.ModelForm):
     # descriptions = forms.CharField(widget=forms.Textarea())
 
     # An inline class to provide additional information on the form.
+    # summary = forms.CharField(label='Summary', widget=forms.Textarea)
+    # descriptions = forms.CharField(label='Descriptions', widget=forms.Textarea)
+
+    id_candidate = forms.CharField(label='', 
+                widget=forms.TextInput(
+                        attrs={'placeholder': "Candidate ID", 
+                            "class": "form-control"}
+                    ))
+    
+    name_candidate = forms.CharField(label='', 
+                widget=forms.TextInput(
+                        attrs={'placeholder': "Candidate Name", 
+                            "class": "form-control"}
+                    ))
+
+    summary = forms.CharField(label='', 
+                widget=forms.Textarea(
+                        attrs={'placeholder': "Summary", 
+                            "class": "form-control"}
+                    ))
+
+    descriptions = forms.CharField(label='', 
+                widget=forms.Textarea(
+                        attrs={'placeholder': "Descriptions", 
+                            "class": "form-control"}
+                    ))
     class Meta:
         # Provide an association between the ModelForm and a model
         model = Candidate

@@ -1,17 +1,8 @@
-<form class= "form-inline  navbar-form navbar-left my-1 my-lg-1" method='GET' acton='{% url "home" %}'>
-                 <div class="form-group">
-                     <input class="form-control mr-sm-2"  type ='search' name= 'q' placeholder="Search" value='{{ request.GET.q }}' />
-                 </div>
-                     <input class="btn btn-primary" type='submit' value='Search'/>
-     
-</form>
-     
 
-
-<!-- 
-<form class="form-inline  navbar-form navbar-left my-1 my-lg-1">
+<form class= "form-inline  navbar-form navbar-left my-1 my-lg-1" method='GET' action='{% url "candidate:candidatelist" %}'>
         <div class="form-group">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        </div>
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form> -->
+            <input class="form-control mr-sm-2" type='text' name='q' placeholder='Your search' value='{{ request.GET.q }}'/>
+            </div>
+        <input class="btn btn-default" type='submit' value='Search'/>
+
+</form>

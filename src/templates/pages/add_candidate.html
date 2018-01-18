@@ -1,33 +1,13 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
+{% block title %} Create Candidate | {{ block.super }}{% endblock title %}
+
 
 {% block content %}
-
-
-
-
-    {% include "pages/form.html" with form=form btn_title="Add Candidate" %}
-
+<div class='row'>
+    <div class='col-sm-8 col-sm-offset-2'>
+        <h1>Create Candidate </h1>
+        {% include "pages/form.html" with form=form btn_title='Create Candidate' %}
+    </div>
+</div>
 {% endblock content %}
-<!-- <!DOCTYPE html>
-<html>
-    <head>
-        <title>Candaite</title>
-    </head>
-
-    <body>
-        <h1>Add a Candidate</h1>
-
-
-            <form action="" method="post" action="">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <input type="submit" value="Create Candidate"" />
-            </form>
-
-    </body>
-
-</html> -->
-
-
-
-

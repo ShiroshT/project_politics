@@ -22,9 +22,8 @@
   </head>
 
   <body>
-     
-      <div class='container'>
-       {% include "navbar.html" %}
+      {% include "navbar.html" %}
+      <div class='container-fluid'>
           <div class= 'container pt-5'>
             {% block content %}
                 Home page 
@@ -33,6 +32,8 @@
       </div>
 
  
+    {% block script %}{% endblock script %}
+
     <footer class="container">
       <p>&copy; Company 2017</p>
     </footer>
