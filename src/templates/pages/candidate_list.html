@@ -20,29 +20,27 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function parseCandidate(){
-  if (candidateList == 0){
-    $(#candidate-container).text("No tweets currently")
-
-  } else {
-  $.each(candidateList, function(key, value){
-            var candidateKey = key;
-            var candidate_id_candidate = value.id_candidate;
-            var candidate_user = value.userId;
-            var candidate_summary = value.summary
-            $("#candidate-container").append(
-                "<div class=\"media\"><div class=\"media-body\">" + candidate_id_candidate + "<br/>" + candidate_summary + "<br/> via " + candidate_user.username + " | " + "<a href='#'>View</a>" + "</div></div><hr/>"
-            )
-        })
-    }
-}
-
 $(document).ready(function(){
     console.log("working"); 
     var query = getParameterByName('q')
     var candidateList = [];
 
+  function parseCandidate(){
+    if (candidateList == 0){
+      $("#candidate-container").text("No tweets currently")
 
+    } else {
+    $.each(candidateList, function(key, value){
+              var candidateKey = key;
+              var candidate_id_candidate = value.id_candidate;
+              var candidate_user = value.userId;
+              var candidate_summary = value.summary
+              $("#candidate-container").append(
+                  "<div class=\"media\"><div class=\"media-body\">" + candidate_id_candidate + "<br/>" + candidate_summary + "<br/> via " + candidate_user.username + " | " + "<a href='#'>View</a>" + "</div></div><hr/>"
+              )
+          })
+      }
+    }
     $.ajax({
       url: "api/candidates/",
       data: {

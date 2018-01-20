@@ -8,9 +8,9 @@ from .serializers import CandidateModelSerializer
 class  CandidateListAPIView(generics.ListAPIView):
     serializer_class = CandidateModelSerializer
 
-
     def get_queryset(self, *args, **kwargs):
         qs = Candidate.objects.all()
+        print(self.request.GET)
         query = self.request.GET.get("q", None)
         if query is not None:
             query = query.strip()
