@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^pages/', include('pages.urls', namespace='candidate')),
     url(r'^$', home, name = 'home'),
     # url(r'^$', views.CandidateListView.as_view(), name = 'home'),
-    url(r'^api/candidates', include('pages.api.urls', namespace='candidate-api')),
+    url(r'^api/candidates/', include('pages.api.urls', namespace='candidate-api')),
 ]
 
 

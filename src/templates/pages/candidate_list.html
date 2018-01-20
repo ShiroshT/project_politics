@@ -1,16 +1,71 @@
 {% extends "base.html" %}
 
+<style>
+ #candidate-container {
+        }
+ </style>
+  
 {% block script %}
-<script>
+<script>   
+
+function getParameterByName(name, url) {
+    if (!url) {
+      url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function parseCandidate(){
+  if (candidateList == 0){
+    $(#candidate-container).text("No tweets currently")
+
+  } else {
+  $.each(candidateList, function(key, value){
+            var candidateKey = key;
+            var candidate_id_candidate = value.id_candidate;
+            var candidate_user = value.userId;
+            var candidate_summary = value.summary
+            $("#candidate-container").append(
+                "<div class=\"media\"><div class=\"media-body\">" + candidate_id_candidate + "<br/>" + candidate_summary + "<br/> via " + candidate_user.username + " | " + "<a href='#'>View</a>" + "</div></div><hr/>"
+            )
+        })
+    }
+}
+
+$(document).ready(function(){
+    console.log("working"); 
+    var query = getParameterByName('q')
+    var candidateList = [];
 
 
+    $.ajax({
+      url: "api/candidates/",
+      data: {
+      "q": query
+      },
+      method: "GET",
+      success: function(data){
+        // console.log(data)
+        candidateList = data
+        parseCandidate()
+      },
+      error: function(data){
+        console.log("error")
+        console.log(data)
+      }
+    })
+  });
 </script>
-
 {% endblock script %}
 
 
-{% block content %}
-   
+
+{% block content %}   
     <div class='row'>
         <div class='col-sm-3 col-xs-12' style='background-color:red;'>
         <h1>{{ request.user }}</h1>
@@ -19,11 +74,18 @@
              {% if not request.GET.q %}
                 <div class=''>
                     
-                    {% include "pages/form.html" with form=create_form action_url=create_url btn_title='Add Candidate' %}
+                {% include "pages/form.html" with form=create_form action_url=create_url btn_title='Add Candidate' %}
 
                 </div>
                 <hr/>
             {% endif %}
+
+          <div id='candidate-container'>
+
+
+          </div>
+
+
         {% for object in object_list %}
             <div class="media">
                   <div class="media-left">
@@ -34,11 +96,15 @@
                     </a>
                   </div>
                   <div class="media-body">
-                    {{ object.name_candidate }}<br/>
-                    {{ object.id_content }}<br/>
-                    {{ object.summary }}<br/>
-                    via {{ object.userId }}  | <a href='{{ object.get_absolute_url }}'>View</a>
+                        {{ object.name_candidate }}<br/>
+                        {{ object.id_content }}<br/>
+                        {{ object.summary }}<br/>
+                        via {{ object.userId }}  | <a href='{{ object.get_absolute_url }}'>View</a>
                   </div>
+                  <!-- <div class="media-body">
+                    {{ object.content }}<br/>
+                    via {{ object.user }} | {{ object.timestamp|timesince }} ago | <a href='{{ object.get_absolute_url }}'>View</a>
+                  </div> -->
             </div>
             <hr/>
         {% empty %}
@@ -54,100 +120,3 @@
 
 {% endblock content %}
 
-
-
-
-
-
-<style>
-        #candidate-container {
-        }
- </style>
-        
-{% block script %}
-<script>
-   function getParameterByName(name, url) {
-      if (!url) {
-         url = window.location.href;
-            }
-            name = name.replace(/[\[\]]/g, "\\$&");
-            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, " "));
-     }
-    
-    $(document).ready(function(){
-    console.log("working");
-    var query = getParameterByName('q')
-    var CandiateList = [];
-          
-    function parseCandidates()
-    {
-        if (candidateList == 0) 
-        {
-              $("#candidate-container").text("No Candidates currently found.")
-        } 
-        else 
-        {
-           // Candidates exist, parse & display them
-            $.each(candidateList, function(key, value)
-            {
-                  var candidateKey = key;
-                  var candidateContent = value.content;
-                  var candidateUser = value.user;
-                  $("#tweet-container").append(
-                      "<div class=\"media\"><div class=\"media-body\">" + tweetContent + "<br/> via " + tweetUser.username + " | " + "<a href='#'>View</a>" + "</div></div><hr/>"
-                  )
-            })
-        }
-    }
-
-    $.ajax({
-            url: "/api/candidates/",
-            data: {
-              "q": query
-            },
-            method: "GET",
-            success: function(data){
-              // console.log(data)
-              candidateList = data
-              parseCandidates()
-             
-            },
-            error: function(data){
-              console.log("error")
-              console.log(data)
-            }
-          })
-    });
-        </script>
-    {% endblock script %}
-        
-        
-        
-     {% block content %}
-              <div class='row'>
-                <div class='col-sm-3 col-xs-12' style='background-color:red;'>
-                <h1>{{ request.user }}</h1>
-                </div>
-                <div class='col-sm-9 '>
-                     {% if not request.GET.q %}
-                        <div class=''>
-                            
-                            {% include "tweets/form.html" with form=create_form action_url=create_url btn_title='Tweet' %}
-        
-                        </div>
-                        <hr/>
-                    {% endif %}
-        
-                  <div id='tweet-container'>
-        
-        
-                  </div>
-        
-        
-                </div>
-            </div>
-    {% endblock content %}
