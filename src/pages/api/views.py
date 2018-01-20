@@ -1,14 +1,25 @@
 
 from django.db.models import Q
 from rest_framework import generics
+from rest_framework import permissions
 
 from pages.models import Candidate
 from .serializers import CandidateModelSerializer
 
+
+
+class CandidateCreateAPIView(generics.CreateAPIView):
+    serializer_class = CandidateModelSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(userId=self.request.user)
+
+
 class  CandidateListAPIView(generics.ListAPIView):
     serializer_class = CandidateModelSerializer
 
-    def get_queryset(self, *args, **kwargs):
+    def get_queryset(self, *args, **kwargs):    
         qs = Candidate.objects.all()
         print(self.request.GET)
         query = self.request.GET.get("q", None)
@@ -21,9 +32,3 @@ class  CandidateListAPIView(generics.ListAPIView):
                 Q(descriptions__icontains=query)
             )
         return qs 
-
-    # def get_queryset(self):
-    #     return Candidate.objects.all()
-
-
-

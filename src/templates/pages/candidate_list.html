@@ -13,15 +13,17 @@ function getParameterByName(name, url) {
       url = window.location.href;
     }
     name = name.replace(/[\[\]]/g, "\\$&");
+   
     var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
         results = regex.exec(url);
+       
     if (!results) return null;
     if (!results[2]) return '';
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 $(document).ready(function(){
-    console.log("working"); 
+    // console.log("working"); 
     var query = getParameterByName('q')
     var candidateList = [];
 
@@ -41,27 +43,65 @@ $(document).ready(function(){
           })
       }
     }
-    $.ajax({
-      url: "api/candidates/",
-      data: {
-      "q": query
-      },
-      method: "GET",
-      success: function(data){
-        // console.log(data)
-        candidateList = data
-        parseCandidate()
-      },
-      error: function(data){
-        console.log("error")
-        console.log(data)
-      }
-    })
+
+   function fetchCandidates(){
+      console.log("fetching...")
+      $.ajax({
+          url: "/api/candidates/",
+          data: {
+          "q": query
+          },
+          method: "GET",
+          success: function(data){
+            // console.log(data)
+            candidateList = data
+            parseCandidate()
+          },
+          error: function(data){
+            console.log("errorurl")
+            console.log(url)
+            // console.log(data)
+          }
+        })
+   }
+
+   fetchCandidates()
+
+    $("#tweet-form").submit(function(event){
+      event.preventDefault()
+
+      var this_ = $(this)
+      var formData = this_.serialize()
+
+      $.ajax({
+          url: "/api/candidates/create",
+          data: formData,
+          method: "POST",
+          success: function(data){
+            console.log(data)
+            fetchCandidates()
+            // candidateList = data
+            // parseCandidate()
+          },
+          error: function(data){
+            console.log("error")
+            console.log(data.statusText)
+            console.log(data.status)
+            // console.log(data)
+          }
+        })
+
+
+      
+  })
+
+
+
+
+
   });
 </script>
 {% endblock script %}
-
-
 
 {% block content %}   
     <div class='row'>
@@ -72,49 +112,46 @@ $(document).ready(function(){
              {% if not request.GET.q %}
                 <div class=''>
                     
-                {% include "pages/form.html" with form=create_form action_url=create_url btn_title='Add Candidate' %}
+                {% include "pages/form.html" with form=create_form action_url=create_url btn_title='Add Candidate' form_id='tweet-form' %}
 
                 </div>
                 <hr/>
             {% endif %}
 
           <div id='candidate-container'>
-
-
           </div>
-
-
-        {% for object in object_list %}
-            <div class="media">
-                  <div class="media-left">
-                    <a href="#">
-                      {% if object.image %}
-                        <img class="media-object" src="..." alt="...">
-                     {% endif %}
-                    </a>
-                  </div>
-                  <div class="media-body">
-                        {{ object.name_candidate }}<br/>
-                        {{ object.id_content }}<br/>
-                        {{ object.summary }}<br/>
-                        via {{ object.userId }}  | <a href='{{ object.get_absolute_url }}'>View</a>
-                  </div>
-                  <!-- <div class="media-body">
-                    {{ object.content }}<br/>
-                    via {{ object.user }} | {{ object.timestamp|timesince }} ago | <a href='{{ object.get_absolute_url }}'>View</a>
-                  </div> -->
-            </div>
-            <hr/>
-        {% empty %}
-            {% if request.GET.q %}
-             <p>No tweets found.</p>
-            {% else %}
-            <p>No tweets yet.</p>
-            {% endif %}
-        {% endfor %}
-
         </div>
     </div>
 
 {% endblock content %}
 
+
+<!-- 
+{% for object in object_list %}
+<div class="media">
+      <div class="media-left">
+        <a href="#">
+          {% if object.image %}
+            <img class="media-object" src="..." alt="...">
+         {% endif %}
+        </a>
+      </div>
+      <div class="media-body">
+            {{ object.name_candidate }}<br/>
+            {{ object.id_content }}<br/>
+            {{ object.summary }}<br/>
+            via {{ object.userId }}  | <a href='{{ object.get_absolute_url }}'>View</a>
+      </div>
+      <div class="media-body">
+        {{ object.content }}<br/>
+        via {{ object.user }} | {{ object.timestamp|timesince }} ago | <a href='{{ object.get_absolute_url }}'>View</a>
+      </div>
+</div>
+<hr/>
+{% empty %}
+{% if request.GET.q %}
+ <p>No tweets found.</p>
+{% else %}
+<p>No tweets yet.</p>
+{% endif %}
+{% endfor %} -->

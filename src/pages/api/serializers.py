@@ -4,7 +4,8 @@ from pages.models import Candidate
 
 
 class CandidateModelSerializer(serializers.ModelSerializer):
-    userId = UserPublicDisplaySerializer()
+    userId = UserPublicDisplaySerializer(read_only=True) #it is also possible when needed to include write_only
+
     class Meta:
         model = Candidate
         fields = [
