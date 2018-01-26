@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class='row'>
+    <div class='col-sm-3 col-xs-12'>
+        <h1> {{ object.username }} <br></h1>
+
+    </div>
+    <div class='col-sm-9 col-xs-12'>
+           <h1> Activity </h1>
+
+           {% for obj in  object.candidate_set.all %}
+                {{ obj.id_candidate}} <br/>
+       
+           {% endfor %}
+
+           
+    </div>
+
+
+</div>
+
+{% endblock content %}

@@ -4,6 +4,8 @@ from rest_framework import generics
 from rest_framework import permissions
 
 from pages.models import Candidate
+
+from .pagination import StandardResultsPagination
 from .serializers import CandidateModelSerializer
 
 
@@ -18,10 +20,10 @@ class CandidateCreateAPIView(generics.CreateAPIView):
 
 class  CandidateListAPIView(generics.ListAPIView):
     serializer_class = CandidateModelSerializer
+    pagination_class = StandardResultsPagination
 
     def get_queryset(self, *args, **kwargs):    
-        qs = Candidate.objects.all()
-        print(self.request.GET)
+        qs = Candidate.objects.all().order_by('-pk')
         query = self.request.GET.get("q", None)
         if query is not None:
             query = query.strip()

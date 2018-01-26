@@ -13,6 +13,5 @@ class UserDetailView(DetailView):
     queryset = User.objects.all()
     lookup_field= 'username'
     
-    # slug field stuff is also useful here but havent been used
-    def get_object(self):
+    def get_object(self);
         return get_object_or_404(User, username__iexact=self.kwargs.get("username"))
