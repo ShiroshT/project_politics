@@ -1,4 +1,3 @@
-
 from django.db.models import Q
 from rest_framework import generics
 from rest_framework import permissions
@@ -23,7 +22,10 @@ class  CandidateListAPIView(generics.ListAPIView):
     pagination_class = StandardResultsPagination
 
     def get_queryset(self, *args, **kwargs):    
-        qs = Candidate.objects.all().order_by('-pk')
+        im_following=self.request.user.profile.get_following()
+        qs1 = Candidate.objects.filter(userId__in=im_following).order_by('-pk')
+        qs2 = Candidate.objects.filter(userId=self.request.user)
+        qs = (qs1|qs2).distinct().order_by("-timestamp")
         query = self.request.GET.get("q", None)
         if query is not None:
             query = query.strip()

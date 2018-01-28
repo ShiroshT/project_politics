@@ -36,6 +36,23 @@ $(document).ready(function(){
     var nextCandidateUrl; 
 
 
+
+
+$(document).ready(function(){
+  var query = getParameterByName('q')
+  var tweetList = [];
+  var nextTweetUrl;
+  function updateHashLinks(){
+    $(".media-body").each(function(data){
+        var hashtagRegex = /(^|\s)#([\w\d-]+)/g
+        var newText = $(this).html().replace(hashtagRegex, "$1<a href='/tags/$2/'>#$2</a>")
+        $(this).html(newText)
+        
+    })
+  }
+
+
+
 // -------------------------------------------------------------------------------------------------------
 // this is displaying each results being pumped from the API and appending the results 
 // -------------------------------------------------------------------------------------------------------
@@ -46,7 +63,7 @@ $(document).ready(function(){
               var candidate_id_candidate = candidateValue.id_candidate;
               var candidate_user = candidateValue.userId;
               var candidate_summary = candidateValue.summary
-              var candidateFormattedHtml =  "<div class=\"media\"><div class=\"media-body\">" + candidate_id_candidate + "<br/>" + candidate_summary + "<br/> via " + candidate_user.username + " | " + "<a href='#'>View</a>" + "</div></div><hr/>"
+              var candidateFormattedHtml =  "<div class=\"media\"><div class=\"media-body\">" + candidate_id_candidate + "<br/>" + candidate_summary + "<br/> via <a href='" + candidate_user.url + "'>"+ candidate_user.username + "</a> | " + "<a href='#'>View</a>" + "</div></div><hr/>"
 
               if (prepend==true){
                 $("#candidate-container").prepend(candidateFormattedHtml)
@@ -99,6 +116,8 @@ $(document).ready(function(){
             }
 
             parseCandidate()
+            updateHashLinks()
+
           },
           error: function(data){
             console.log("errorurl")
@@ -174,6 +193,7 @@ $(document).ready(function(){
               success: function(data){
                 
                 attachCandidate(data, true)
+                updateHashLinks()
                 this_.find("input[type=text], textarea").val("")
                 
               },
